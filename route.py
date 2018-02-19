@@ -5,8 +5,8 @@ import sqlite3
 
 app = Flask(__name__, static_url_path='')
 
-default_src_path = '/home/anton/Media/pictures'
-default_dest_path = '/home/anton/Media/pictures-anime'
+default_src_path = '/home/pi/drive/torrents/Anime-bot/complete'
+default_dest_path = '/home/pi/drive/Media/Anime'
 
 
 conn = sqlite3.connect('files.db')
@@ -69,7 +69,7 @@ class Inode:
             raise RuntimeError('mvln: src is already a link')
 
         os.rename(self.fullpath, dest)
-        os.link(dest, self.fullpath)
+        os.symlink(dest, self.fullpath)
 
     def extension(self):
         return self.name[self.name.rfind('.')+1:]

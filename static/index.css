@@ -80,6 +80,7 @@ table {
     z-index: 1;
     background: url('/static/sayaka.png') no-repeat center;
     background-size: 100%;
+    pointer-events: none;
 }
 
 #saya:hover {

@@ -8,8 +8,7 @@ app = Flask(__name__, static_url_path='')
 default_src_path = '/home/pi/drive/torrents/Anime-bot/complete'
 default_dest_path = '/home/pi/drive/Media/Anime'
 
-
-conn = sqlite3.connect('files.db')
+conn = None
 
 
 class Inode:
@@ -162,6 +161,16 @@ def hide_target(iid):
 def delete_target(iid):
     Inode.from_id(iid).delete()
     return ''
+
+
+@app.before_request
+def prereq():
+    conn = sqlite3.connect('files.db')
+
+
+@app.after_request
+def postreq(response):
+    conn.commit()
 
 
 if __name__ == '__main__':

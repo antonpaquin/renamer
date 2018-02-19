@@ -1,0 +1,142 @@
+/* Copied from homulili */
+/* Global defaults */
+body {
+    --color-primary: #8ba4ff;
+    --color-secondary: #c2c2c2;
+
+    background: #fff;
+    color: var(--color-secondary);
+    padding: 20px;
+}
+
+body, input {
+    font-family: 'Open Sans', 'ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯', sans-serif;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+/* button nav */
+#button-nav {
+    margin: 0 0 30px;
+    display: inline-block;
+    position: relative;
+}
+
+#button-nav .btn {
+    margin: 0;
+}
+
+/* Style table */
+#table-container {
+    display: inline-block;
+    position: relative;
+    padding: 30px;
+    margin: 0 0 30px;
+    border: 3px solid var(--color-secondary) ;
+    border-radius: 5px;
+}
+
+table {
+    border-spacing: 0;
+}
+
+#table-container tr {
+    color: var(--color-primary);
+    z-index: 2;
+    height: 54px;
+}
+
+#table-container td {
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index: 2;
+}
+
+/* Links at top */
+#navlink a, #navlink p {
+    display: inline-block;
+    font-size: 32px;
+    margin-right: 10px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+}
+
+#navlink a:hover {
+    text-decoration: underline;
+}
+
+/* floaty sayaka*/
+#saya {
+    width: 518px;
+    height: 800px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    background: url('/static/sayaka.png') no-repeat center;
+    background-size: 100%;
+}
+
+#saya:hover {
+    opacity: 0;
+}
+
+/* Style the nice button things */
+.btn {
+    border: 2px solid var(--color-primary);
+    border-radius: 6px;
+
+    position: relative;
+    width: 120px;
+    height: 30px;
+
+    background: #0000;
+    margin: 10px;
+    z-index: 2;
+}
+
+.btn input {
+    background: #0000;
+    color: var(--color-primary);
+
+    width: 120px;
+    height: 30px;
+
+    border: 0;
+
+    cursor: pointer;
+}
+
+.btn-mvln, .btn-hide, .btn-delete {
+    border: 2px solid var(--color-primary);
+    border-radius: 6px;
+
+    height: 34px;
+    width: 80px;
+
+    background: #0000;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.inp-episode {
+    width: 40px;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.deleted td {
+    opacity: 0.2;
+    transition: opacity 0.2s linear;
+}

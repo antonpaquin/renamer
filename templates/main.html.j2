@@ -1,0 +1,80 @@
+<html>
+<head>
+<link rel="stylesheet" href="/static/index.css">
+</head>
+
+<body>
+<div id="navlink">
+    <a href="/">/</a>
+    <a href="/">path</a>
+</div>
+
+<div id="button-nav">
+<table>
+    <tr>
+        <td>
+            <div id="btn-nav-files" class="btn">
+                <a href="/"><input type="button" class="passive" value="btn"></a>
+            </div>
+        </td>
+    </tr>
+</table>
+</div>
+<br>
+
+<div id="table-container">
+<table id="files-table">
+    <tr>
+        <td>Id</td>
+        <td>Type</td>
+        <td>Name</td>
+    </tr>
+{% for n in nodes %}
+    <tr>
+        <td>{{ n.iid }}</td>
+        <td>{{ n.type }}</td>
+        <td>{{ n.name }}</td>
+        <td id="form-mvln-{{ n.iid }}">
+            <select form="form-mvln-{{ n.iid }}" field="show"></select>
+            <select form="form-mvln-{{ n.iid }}" field="season"></select>
+            <input type="number" class="inp-episode" form="form-mvln-{{ n.iid }}" field="episode">
+            <input type="button" class="btn-mvln" form="form-mvln-{{ n.iid }}" field="submit" value="mvln">
+        </td>
+        <td id="form-hide-{{ n.iid }}">
+            <input type="button"  class="btn-hide" value="Hide">
+        </td>
+        <td id="form-delete-{{ n.iid }}">
+            <input type="button" class="btn-delete" value="Delete" state="init">
+        </td>
+    </tr>
+{% endfor %}
+</table>
+</div>
+<script type="text/javascript">
+    var file_ids = [
+{% for n in nodes %}
+        {{ n.iid }},
+{% endfor %}
+    ];
+
+    var shows = [
+{% for s in shows %}
+        '{{ s.name }}',
+{% endfor %}
+    ];
+
+{# Don't worry this is fine #}
+    var show_seasons = {{ '{' }}
+{% for s in shows %}
+        '{{ s.name }}': [
+    {% for season in s.seasons %}
+            '{{ season }}',
+    {% endfor %}
+        ],
+{% endfor %}
+    {{ '}' }};
+</script>
+<script type="text/javascript" src="/static/rename.js"></script>
+<div id="saya"></div>
+</body>
+</html>

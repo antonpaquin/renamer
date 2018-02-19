@@ -3,8 +3,9 @@
 body {
     --color-primary: #8ba4ff;
     --color-secondary: #c2c2c2;
+    --color-background: #fff;
 
-    background: #fff;
+    background: var(--color-background);
     color: var(--color-secondary);
     padding: 20px;
 }
@@ -77,14 +78,10 @@ table {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 1;
+    z-index: -1;
     background: url('/static/sayaka.png') no-repeat center;
     background-size: 100%;
     pointer-events: none;
-}
-
-#saya:hover {
-    opacity: 0;
 }
 
 /* Style the nice button things */
@@ -120,7 +117,7 @@ table {
     height: 34px;
     width: 80px;
 
-    background: #0000;
+    background: var(--color-background);
     color: var(--color-primary);
     cursor: pointer;
 }
@@ -140,4 +137,9 @@ input[type=number]::-webkit-outer-spin-button {
 .deleted td {
     opacity: 0.2;
     transition: opacity 0.2s linear;
+}
+
+.name {
+    max-width: 500px;
+    word-wrap: break-word;
 }

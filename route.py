@@ -73,6 +73,12 @@ class Inode:
     def extension(self):
         return self.name[self.name.rfind('.')+1:]
 
+    def guess_epnum(self):
+        try:
+            return int(re.search('[0-9]+', self.name).group())
+        except AttributeError:
+            return 0
+
     @staticmethod
     def from_id(iid) -> 'Inode':
         return Inode.inode_id_lookup.get(iid, None)

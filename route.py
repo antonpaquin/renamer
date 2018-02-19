@@ -2,6 +2,7 @@ import os
 import re
 from flask import Flask, render_template, send_from_directory, request
 import sqlite3
+from fuzzywuzzy import process as fuzzywuzzy_process
 
 app = Flask(__name__, static_url_path='')
 
@@ -31,6 +32,9 @@ class Inode:
         self.hidden = False
         self.sql_sync()
         Inode.inode_id_lookup[self.iid] = self
+
+        self.episode_guess = 0
+        self.show_guess = ''
 
     def sql_sync(self):
         name_key = str(self.fullpath.__hash__())
@@ -73,11 +77,12 @@ class Inode:
     def extension(self):
         return self.name[self.name.rfind('.')+1:]
 
-    def guess_epnum(self):
+    def guess_params(self, showlist):
+        self.show_guess = fuzzywuzzy_process.extractOne(self.name, showlist)[0]
         try:
-            return int(re.search('[0-9]+', self.name).group())
+            self.episode_guess = int(re.search('[0-9]+', self.name).group())
         except AttributeError:
-            return 0
+            self.episode_guess = 0
 
     @staticmethod
     def from_id(iid) -> 'Inode':
@@ -133,7 +138,56 @@ def main():
         shows.append(Show(os.path.join(default_dest_path, ff)))
     shows.sort(key=lambda s: s.name)
 
-    return render_template('main.html.j2', nodes=nodes, shows=shows)
+    show_names = [s.name for s in shows]
+    for node in nodes:
+        node.guess_params(show_names)
+
+    return render_template('main.html.j2', nodes=nodes, shows=shows, path=get_path(default_src_path), rootpath='')
+
+
+@app.route('/d/<path:path>')
+def subdir(path):
+    src_path = os.path.join(default_src_path, path)
+    if not is_subdir(src_path, default_src_path):
+        return '', 401
+
+    nodes = []
+    for ff in os.listdir(src_path):
+        nodes.append(Inode(os.path.join(src_path, ff)))
+    nodes = list(filter(lambda n: not n.hidden, nodes))
+    nodes.sort(key=lambda n: (n.type, n.name))
+
+    shows = []
+    for ff in os.listdir(default_dest_path):
+        shows.append(Show(os.path.join(default_dest_path, ff)))
+    shows.sort(key=lambda s: s.name)
+
+    show_names = [s.name for s in shows]
+    for node in nodes:
+        node.guess_params(show_names)
+
+    return render_template('main.html.j2', nodes=nodes, shows=shows, path=get_path(path), rootpath=path + '/')
+
+
+def get_path(path):
+    path = os.path.realpath(os.path.join(default_src_path, path))
+    directory = os.path.realpath(default_src_path)
+    rel = os.path.relpath(path, directory)
+    components = os.path.split(rel)
+    res = []
+    cur = ''
+    for c in components:
+        if c not in {'', '.'}:
+            cur = os.path.join(cur, c)
+            res.append((c, cur))
+    return res
+
+
+def is_subdir(path, directory):
+    path = os.path.realpath(path)
+    directory = os.path.realpath(directory)
+    relative = os.path.relpath(path, directory)
+    return not (relative == os.pardir or relative.startswith(os.pardir + os.sep))
 
 
 @app.route('/static/<path:path>')

@@ -107,9 +107,13 @@ function finish_mvln(elem, file_id, resp) {
     var show_selectors = document.querySelectorAll('[field=show]');
     for (var ii=0; ii<show_selectors.length; ii++) {
         var elem = show_selectors[ii];
+        var guess = elem.getAttribute('guess');
         for (var jj=0; jj < shows.length; jj++) {
             var opt = document.createElement('option');
             opt.innerText = shows[jj];
+            if (shows[jj] === guess) {
+                opt.setAttribute('selected', 'selected');
+            }
             elem.appendChild(opt);
         }
         elem.onchange = function() {
@@ -125,5 +129,11 @@ function finish_mvln(elem, file_id, resp) {
             }
         };
         elem.onchange();
+    }
+
+    var episode_selectors = document.querySelectorAll('[field=episode]');
+    for (var ii=0; ii<episode_selectors.length; ii++) {
+        var elem = episode_selectors[ii];
+        elem.value = elem.getAttribute('guess');
     }
 })();

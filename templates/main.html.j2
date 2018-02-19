@@ -6,7 +6,9 @@
 <body>
 <div id="navlink">
     <a href="/">/</a>
-    <a href="/">path</a>
+{% for p in path %}
+    <a href="/d/{{ p[1] }}">{{ p[0] }}</a><a>/</a>
+{% endfor %}
 </div>
 
 <div id="button-nav">
@@ -33,11 +35,15 @@
     <tr>
         <td>{{ n.iid }}</td>
         <td>{{ n.type }}</td>
+{% if n.type == 'd' %}
+        <td class="name"><a href="/d/{{ rootpath }}{{ n.name }}">{{ n.name }}</a></td>
+{% else %}
         <td class="name">{{ n.name }}</td>
+{% endif %}
         <td id="form-mvln-{{ n.iid }}">
-            <select form="form-mvln-{{ n.iid }}" field="show"></select>
+            <select form="form-mvln-{{ n.iid }}" field="show" guess="{{ n.show_guess }}"></select>
             <select form="form-mvln-{{ n.iid }}" field="season"></select>
-            <input type="number" class="inp-episode" form="form-mvln-{{ n.iid }}" field="episode">
+            <input type="number" class="inp-episode" form="form-mvln-{{ n.iid }}" field="episode" guess="{{ n.episode_guess }}">
             <input type="button" class="btn-mvln" form="form-mvln-{{ n.iid }}" field="submit" value="mvln">
         </td>
         <td id="form-hide-{{ n.iid }}">

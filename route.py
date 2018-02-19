@@ -125,6 +125,7 @@ def main():
     shows = []
     for ff in os.listdir(default_dest_path):
         shows.append(Show(os.path.join(default_dest_path, ff)))
+    shows.sort(key=lambda s: s.name)
 
     return render_template('main.html.j2', nodes=nodes, shows=shows)
 
@@ -165,12 +166,14 @@ def delete_target(iid):
 
 @app.before_request
 def prereq():
+    global conn
     conn = sqlite3.connect('files.db')
 
 
 @app.after_request
 def postreq(response):
     conn.commit()
+    return response
 
 
 if __name__ == '__main__':

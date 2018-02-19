@@ -1,0 +1,4 @@
+#! /bin/bash
+
+export PYTHONHASHSEED=4040
+python3 route.py

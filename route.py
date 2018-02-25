@@ -85,6 +85,7 @@ class Inode:
         global name_match_cache, name_match_valid
 
         if tuple(showlist) != name_match_valid:
+            name_match_valid = tuple(showlist)
             name_match_cache = {}
 
         if self.fullpath in name_match_cache:

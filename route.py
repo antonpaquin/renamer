@@ -12,6 +12,10 @@ default_dest_path = '/home/pi/drive/Media/Anime'
 conn = None
 
 
+name_match_cache = {}
+name_match_valid = None
+
+
 class Inode:
     inode_id_lookup = {}
 
@@ -78,11 +82,21 @@ class Inode:
         return self.name[self.name.rfind('.')+1:]
 
     def guess_params(self, showlist):
-        self.show_guess = fuzzywuzzy_process.extractOne(self.name, showlist)[0]
-        try:
-            self.episode_guess = int(re.search('[0-9]+', self.name).group())
-        except AttributeError:
-            self.episode_guess = 0
+        global name_match_cache, name_match_valid
+
+        if tuple(showlist) != name_match_valid:
+            name_match_cache = {}
+
+        if self.fullpath in name_match_cache:
+            self.show_guess, self.episode_guess = name_match_cache[self.fullpath]
+        else:
+            self.show_guess = fuzzywuzzy_process.extractOne(self.name, showlist)[0]
+            try:
+                self.episode_guess = int(re.search('[0-9]+', self.name).group())
+            except AttributeError:
+                self.episode_guess = 0
+
+            name_match_cache[self.fullpath] = (self.show_guess, self.episode_guess)
 
     @staticmethod
     def from_id(iid) -> 'Inode':
